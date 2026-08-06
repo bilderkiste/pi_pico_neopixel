@@ -110,6 +110,9 @@ class Neopixel:
         self.brightnessvalue = 255
         self.transfer_mode = transfer_mode
 
+        # allocate new dma_buffer array in constructor only 
+        self.dma_buffer = array.array("I", [0] * num_leds)
+
         if transfer_mode == "DMA":
             self.dma = rp2.DMA()
             # The TX Data Request index for PIO is the (pio << 3) + state_machine
@@ -376,8 +379,10 @@ class Neopixel:
             # Guarrantee minimum sleep time
             time.sleep(self.delay)
             
-            # always copy, otherwise we can mess with pixels buffer while DMA reads it
-            data = array.array('I', self.pixels)
+            # always copy the complete buffer into same array dma_buffer, do not allocate a new array
+            data = self.dma_buffer
+            data[:] = self.pixels
+
             if cut != 0:
                 for i, _ in enumerate(data):
                     data[i] <<= cut

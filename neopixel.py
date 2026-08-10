@@ -373,9 +373,13 @@ class Neopixel:
             cut = 0
 
         if self.transfer_mode == "DMA":
-            # Wait until the last transfer completes if it is not done
+            # Wait until the last transfer (DMA and PIO) completes if it is not done
             while self.dma.active():
                 pass
+            
+            while self.sm.tx_fifo():
+                pass
+
             # Guarrantee minimum sleep time
             time.sleep(self.delay)
             
@@ -425,4 +429,6 @@ class Neopixel:
         :return: None
         """
         self.pixels = array.array("I", [0] * self.num_leds)
+
+
 

@@ -73,7 +73,7 @@ class Neopixel:
     #    'brightnessvalue', # brightness scale factor 1..255
     # ]
 
-    def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=0.0003, transfer_mode="DMA"):
+    def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=340, transfer_mode="DMA"):
         """
         Constructor for library class
 
@@ -82,7 +82,7 @@ class Neopixel:
         :param pin: pin on which data line to led-strip is connected
         :param mode: [default: "RGB"] mode and order of bits representing the color value.
         This can be any order of RGB or RGBW (neopixels are usually GRB)
-        :param delay: [default: 0.0001] delay used for latching of leds when sending data
+        :param delay: [default: 340] delay used for latching of leds when sending data in us
         :param transfer_mode: [default: "PUT"] transfer mode used for sending data to the PIO.
             "PUT" : Use MicroPython put() method to send data to the PIO
                 This is straightforward, but can result in glitching from FIFO underflow.
@@ -381,7 +381,7 @@ class Neopixel:
                 pass
 
             # Guarrantee minimum sleep time
-            time.sleep(self.delay)
+            time.sleep_us(self.delay)
             
             # always copy the complete buffer into same array dma_buffer, do not allocate a new array
             data = self.dma_buffer
@@ -401,11 +401,11 @@ class Neopixel:
             irq_state = disable_irq()
             self.sm.put(self.pixels, cut)
             enable_irq(irq_state)
-            time.sleep(self.delay)
+            time.sleep_us(self.delay)
 
         elif self.transfer_mode == "PUT":
             self.sm.put(self.pixels, cut)
-            time.sleep(self.delay)
+            time.sleep_us(self.delay)
 
         else:
             raise ValueError("Invalid transfer mode: {}".format(self.transfer_mode))

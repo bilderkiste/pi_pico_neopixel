@@ -73,7 +73,7 @@ class Neopixel:
     #    'brightnessvalue', # brightness scale factor 1..255
     # ]
 
-    def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=340, transfer_mode="DMA"):
+    def __init__(self, num_leds, state_machine, pin, mode="RGB", delay=800, transfer_mode="DMA"):
         """
         Constructor for library class
 
@@ -82,7 +82,7 @@ class Neopixel:
         :param pin: pin on which data line to led-strip is connected
         :param mode: [default: "RGB"] mode and order of bits representing the color value.
         This can be any order of RGB or RGBW (neopixels are usually GRB)
-        :param delay: [default: 340] delay used for latching of leds when sending data in us
+        :param delay: [default: 800] delay used for latching of leds when sending data in us
         :param transfer_mode: [default: "PUT"] transfer mode used for sending data to the PIO.
             "PUT" : Use MicroPython put() method to send data to the PIO
                 This is straightforward, but can result in glitching from FIFO underflow.
